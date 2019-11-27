@@ -3434,6 +3434,9 @@ Asc['asc_docs_api'].prototype.openDocument = function(file)
 
     _api.asc_GetDefaultTableStyles();
 
+    this.WordControl.m_oLogicDocument.DrawingDocument.CheckThemes();
+    _api.WordControl.CheckLayouts();
+
     initSpellCheckApi();
 
     var t = this;
