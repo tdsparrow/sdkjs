@@ -3016,8 +3016,8 @@ function initSpellCheckApi() {
 function NativeOpenFileP(_params, documentInfo){
     window["CreateMainTextMeasurerWrapper"]();
     window.g_file_path = "native_open_file";
-    window.NATIVE_DOCUMENT_TYPE = window.native.GetEditorType();
-    var doc_bin = window.native.GetFileString(window.g_file_path);
+    window.NATIVE_DOCUMENT_TYPE = window["native"]["GetEditorType"]();
+    var doc_bin = window["native"]["GetFileString"](window.g_file_path);
     if ("presentation" !== window.NATIVE_DOCUMENT_TYPE){
         return;
     }
@@ -3331,7 +3331,6 @@ Asc['asc_docs_api'].prototype["Native_Editor_Initialize_Settings"] = function(_p
 };
 
 
-
 Asc['asc_docs_api'].prototype["CheckSlideBounds"] = function(nSlideIndex){
     var oBoundsChecker = new AscFormat.CSlideBoundsChecker();
     this.WordControl.m_oLogicDocument.Draw(nSlideIndex, oBoundsChecker);
@@ -3345,7 +3344,6 @@ Asc['asc_docs_api'].prototype["GetNativePageMeta"] = function(pageIndex, bTh, bI
 {
     this.WordControl.m_oDrawingDocument.RenderPage(pageIndex, bTh, bIsPlayMode);
 };
-
 
 
 window["asc_docs_api"].prototype["asc_nativeOpenFile2"] = function(base64File, version)
@@ -3648,67 +3646,61 @@ if(!window.native){
 	}	
 }
 
-if(window.native){
-	window.native.Call_CheckSlideBounds = function(nIndex){
-        if(window.editor) {
-            return window.editor.CheckSlideBounds(nIndex);
+if (window["native"]) {
+	window["native"]["Call_CheckSlideBounds"] = function(nIndex){
+        if (window.editor) {
+            return window.editor["CheckSlideBounds"](nIndex);
         }
 	};
 	
-	window.native.Call_GetPageMeta = function(nIndex, bTh, bIsPlayMode){
-        if(window.editor) {
-            return window.editor.GetNativePageMeta(nIndex, bTh, bIsPlayMode);
+	window["native"]["Call_GetPageMeta"] = function(nIndex, bTh, bIsPlayMode){
+        if (window.editor) {
+            return window.editor["GetNativePageMeta"](nIndex, bTh, bIsPlayMode);
         }
 	};
 
-    window.native.Call_OnMouseDown = function(e) {
+    window["native"]["Call_OnMouseDown"] = function(e) {
         if (window.editor) {
           return window.editor.WordControl.m_oDrawingDocument.OnMouseDown(e);
         }
         return -1;
       };
 
-    window.native.Call_OnMouseUp = function(e){
-        if(window.editor)
-        {
+    window["native"]["Call_OnMouseUp"] = function(e) {
+        if(window.editor) {
             return window.editor.WordControl.m_oDrawingDocument.OnMouseUp(e);
         }
+
         return [];
     };
 
-    window.native.Call_OnMouseMove = function(e){
-        if(window.editor)
-        {
+    window["native"]["Call_OnMouseMove"] = function(e) {
+        if(window.editor) {
             window.editor.WordControl.m_oDrawingDocument.OnMouseMove(e);
         }
     };
 
-    window.native.Call_OnKeyboardEvent = function(e)
-    {
+    window["native"]["Call_OnKeyboardEvent"] = function(e) {
         return window.editor.WordControl.m_oDrawingDocument.OnKeyboardEvent(e);
     };
 
-    window.native.Call_OnCheckMouseDown = function(e)
-    {
+    window["native"]["Call_OnCheckMouseDown"] = function(e) {
         return window.editor.WordControl.m_oDrawingDocument.OnCheckMouseDown(e);
     };
 
-    window.native.Call_ResetSelection = function()
-    {
+    window["native"]["Call_ResetSelection"] = function() {
         window.editor.WordControl.m_oLogicDocument.RemoveSelection(false);
         window.editor.WordControl.m_oLogicDocument.Document_UpdateSelectionState();
         window.editor.WordControl.m_oLogicDocument.Document_UpdateInterfaceState();
     };
 
-    window.native.Call_OnUpdateOverlay = function(param){
-        if(window.editor)
-        {
+    window["native"]["Call_OnUpdateOverlay"] = function(param) {
+        if (window.editor) {
             window.editor.WordControl.OnUpdateOverlay(param);
         }
     };
-    window.native.Call_SetCurrentPage = function(param){
-        if(window.editor)
-        {
+    window["native"]["Call_SetCurrentPage"] = function(param){
+        if (window.editor) {
             var oWC = window.editor.WordControl;
             oWC.m_oLogicDocument.Set_CurPage(param);
             if(oWC.m_oDrawingDocument)
@@ -3721,9 +3713,9 @@ if(window.native){
     };
 }
 
-window.native.Call_Menu_Event = function (type, _params)
+window["native"]["Call_Menu_Event"] = function (type, _params)
 {
-    return _api.Call_Menu_Event(type, _params);
+    return _api["Call_Menu_Event"](type, _params);
 };
 
 
