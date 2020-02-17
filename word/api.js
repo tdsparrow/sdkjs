@@ -5007,7 +5007,7 @@ background-repeat: no-repeat;\
 		    var t = this;
 			AscCommon.sendImgUrls(this, [url], function(data) {
 
-                if (data && data[0])
+                if (data && data[0] && data[0].url !== "error")
                     t.AddImageUrlAction(data[0].url, imgProp, obj);
 
             }, false, undefined, token);
@@ -5393,7 +5393,7 @@ background-repeat: no-repeat;\
 
                     AscCommon.sendImgUrls(this, [sImageToDownLoad], function(data) {
 
-                        if (data && data[0])
+                        if (data && data[0] && data[0].url !== "error")
                         {
                             fReplaceCallback(data[0].url);
                             fApplyCallback();
@@ -8849,7 +8849,7 @@ background-repeat: no-repeat;\
 
 				AscCommon.sendImgUrls(this, [sImageToDownLoad], function(data)
 				{
-					if (data && data[0])
+					if (data && data[0] && data[0].url !== "error")
 					{
 						fReplaceCallback(data[0].url);
 						fApplyCallback();

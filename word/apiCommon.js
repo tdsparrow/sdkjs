@@ -1833,7 +1833,7 @@
 			return;
 		}
 		AscCommon.sendImgUrls(_this.Api, [sUrl], function(data) {
-			if (data && data[0])
+			if (data && data[0] && data[0].url !== "error")
 			{
 				_this.Api.ImageLoader.LoadImagesWithCallback([data[0].url], function(){
 					_this.ImageUrl = data[0].url;
@@ -1918,7 +1918,7 @@
 			return;
 		}
 		AscCommon.sendImgUrls(_this.Api, [sUrl], function(data) {
-			if (data && data[0])
+			if (data && data[0] && data[0].url !== "error")
 			{
 				_this.ImageLoader.LoadImagesWithCallback([data[0].url], function(){
 					_this.ImageUrl = data[0].url;
