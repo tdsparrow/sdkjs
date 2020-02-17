@@ -7279,18 +7279,9 @@ DrawingObjectsController.prototype =
 
     checkEndAddShape: function()
     {
-        if(this.curState instanceof  AscFormat.StartAddNewShape
-            || this.curState instanceof  AscFormat.SplineBezierState
-            || this.curState instanceof  AscFormat.PolyLineAddState
-            || this.curState instanceof  AscFormat.AddPolyLine2State
-            || this.arrTrackObjects.length > 0)
+        if(this.checkTrackDrawings())
         {
-            this.changeCurrentState(new AscFormat.NullState(this));
-            if( this.arrTrackObjects.length > 0)
-            {
-                this.clearTrackObjects();
-                this.updateOverlay();
-            }
+            this.endTrackNewShape();
             if(Asc["editor"])
             {
                 Asc["editor"].asc_endAddShape();
@@ -7972,6 +7963,25 @@ DrawingObjectsController.prototype =
             {
                 this.changeCurrentState(new AscFormat.StartAddNewShape(this, presetGeom));
                 break;
+            }
+        }
+    },
+
+    endTrackNewShape: function()
+    {
+        this.curState.bStart = this.curState.bStart !== false;
+        var bRet = AscFormat.StartAddNewShape.prototype.onMouseUp.call(this.curState, {ClickCount: 1, X: 0, Y:0}, 0, 0, 0);
+        if(bRet === false && this.document)
+        {
+            var oElement = this.document.Content[this.document.CurPos.ContentPos];
+            if(oElement)
+            {
+                var oParagraph = oElement.GetCurrentParagraph();
+                if(oParagraph)
+                {
+                    oParagraph.MoveCursorToStartPos(false);
+                    oParagraph.Document_SetThisElementCurrent(true);
+                }
             }
         }
     },

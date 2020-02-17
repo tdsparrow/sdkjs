@@ -4182,7 +4182,8 @@ CGraphicObjects.prototype =
                 break;
             }
         }
-    }
+    },
+    endTrackNewShape: DrawingObjectsController.prototype.endTrackNewShape
 };
 CGraphicObjects.prototype.Document_Is_SelectionLocked = function(CheckType)
 {
