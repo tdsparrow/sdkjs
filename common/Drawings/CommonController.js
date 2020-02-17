@@ -8213,8 +8213,10 @@ DrawingObjectsController.prototype =
                 {
                     this.selectObject(oDrawingSelectionState.textObject, bDocument ? (oDrawingSelectionState.textObject.parent ? oDrawingSelectionState.textObject.parent.PageNum : nPageIndex) : nPageIndex);
                     var oDocContent;
+                    var Depth = 0;
                     if(oDrawingSelectionState.textObject instanceof AscFormat.CGraphicFrame){
                         oDocContent = oDrawingSelectionState.textObject.graphicObject;
+                        Depth = 1;
                     }
                     else {
                         oDocContent = oDrawingSelectionState.textObject.getDocContent();
@@ -8223,8 +8225,8 @@ DrawingObjectsController.prototype =
                     if(oDocContent){
                         if (true === oSelectionState.DrawingSelection)
                         {
-                            oDocContent.SetContentPosition(oSelectionState.StartPos, 0, 0);
-                            oDocContent.SetContentSelection(oSelectionState.StartPos, oSelectionState.EndPos, 0, 0, 0);
+                            oDocContent.SetContentPosition(oSelectionState.StartPos, Depth, 0);
+                            oDocContent.SetContentSelection(oSelectionState.StartPos, oSelectionState.EndPos, Depth, 0, 0);
                         }
                         else
                         {
