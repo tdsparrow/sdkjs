@@ -8560,6 +8560,7 @@ CPresentation.prototype.InsertContent = function (Content) {
                                             }
                                         }
                                         oLstStyles.merge(oSp.txBody.lstStyle);
+                                        oBodyPr.merge(oSp.txBody.bodyPr);
                                         oSp.txBody.setLstStyle(oLstStyles);
                                         oSp.txBody.setBodyPr(oBodyPr);
                                     }
