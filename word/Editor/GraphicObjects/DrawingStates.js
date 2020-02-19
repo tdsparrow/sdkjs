@@ -770,6 +770,11 @@ RotateState.prototype =
                                 if (bTrackRevisions)
                                     this.drawingObjects.document.SetTrackRevisions(true);
 
+                                if(original.GraphicObj === this.drawingObjects.selection.cropSelection)
+                                {
+                                    this.drawingObjects.resetSelection();
+                                    this.drawingObjects.selection.cropSelection = originalCopy.GraphicObj;
+                                }
                                 this.drawingObjects.selectObject(originalCopy.GraphicObj, pageIndex);
                             }
                             else
@@ -778,7 +783,8 @@ RotateState.prototype =
                                 {
                                     original.Set_XY(bounds.posX, bounds.posY, aParentParagraphs[i], original.GraphicObj.selectStartPage, bMoveState)
                                 }
-                                if(bMoveState){
+                                if(bMoveState)
+                                {
                                     this.drawingObjects.selectObject(original.GraphicObj, pageIndex);
                                 }
                             }

@@ -544,11 +544,22 @@ CShape.prototype.getArrayWrapPolygons = function()
         var R = Math.min(this.extX, DX + extX);
         var B = Math.min(this.extY, DY + extY);
         var ret2 = [];
-        ret2.push({x: L, y: T});
-        ret2.push({x: R, y: T});
-        ret2.push({x: R, y: B});
-        ret2.push({x: L, y: B});
-        ret2.push({x: L, y: T});
+        if(L >= this.extX || T >= this.extY || R <= 0 || B <= 0)
+        {
+            ret2.push({x: 0, y: 0});
+            ret2.push({x: this.extX, y: 0});
+            ret2.push({x: this.extX, y: this.extY});
+            ret2.push({x: 0, y: this.extY});
+            ret2.push({x: 0, y: 0});
+        }
+        else
+        {
+            ret2.push({x: L, y: T});
+            ret2.push({x: R, y: T});
+            ret2.push({x: R, y: B});
+            ret2.push({x: L, y: B});
+            ret2.push({x: L, y: T});
+        }
         ret.push(ret2);
     }
     else if(this.spPr && this.spPr.geometry)
