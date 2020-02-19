@@ -668,7 +668,7 @@ RotateState.prototype =
                     aNearestPos.push(nearest_pos);
                     aParentParagraphs.push(aDrawings[i].Get_ParentParagraph());
                 }
-                if(bMoveState && e.CtrlKey)
+                if(bMoveState && e.CtrlKey && !this.drawingObjects.selection.cropSelection)
                 {
                     for(i = 0; i < aNearestPos.length; ++i)
                     {
@@ -741,7 +741,7 @@ RotateState.prototype =
                             {
                                 original.CheckWH();
                             }
-                            if(bMoveState && aNearestPos[i].Paragraph !== aParentParagraphs[i] && aDrawings[i].Locked !== true)
+                            if(bMoveState && aNearestPos[i].Paragraph !== aParentParagraphs[i] && aDrawings[i].Locked !== true && !(oTrack.originalObject && oTrack.originalObject.isCrop))
                             {
                                 // На удалении включаем пересчет из-за бага (28015), чтобы во время добавления автофигуры на эту же страницу
                                 // расположение всех элементов было рассчитано с уже удаленной автофигурой.
