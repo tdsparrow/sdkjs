@@ -647,22 +647,21 @@
         return this.setLockValue(LOCKS_MASKS.noChangeAspect, bValue);
     };
     CGraphicObjectBase.prototype.Reassign_ImageUrls = function(mapUrl){
+        var blip_fill;
         if(this.blipFill){
             if(mapUrl[this.blipFill.RasterImageId]){
                 if(this.setBlipFill){
-                    var blip_fill = new AscFormat.CBlipFill();
+                    blip_fill = this.blipFill.createDuplicate();
                     blip_fill.setRasterImageId(mapUrl[this.blipFill.RasterImageId]);
-                    blip_fill.setStretch(true);
                     this.setBlipFill(blip_fill);
                 }
             }
         }
         if(this.spPr && this.spPr.Fill && this.spPr.Fill.fill && this.spPr.Fill.fill.RasterImageId){
             if(mapUrl[this.spPr.Fill.fill.RasterImageId]){
-                var blip_fill = new AscFormat.CBlipFill();
+                blip_fill = this.spPr.Fill.fill.createDuplicate();
                 blip_fill.setRasterImageId(mapUrl[this.spPr.Fill.fill.RasterImageId]);
-                blip_fill.setStretch(true);
-                var oUniFill = new AscFormat.CUniFill();
+                var oUniFill = this.spPr.Fill.createDuplicate();
                 oUniFill.setFill(blip_fill);
                 this.spPr.setFill(oUniFill);
             }
