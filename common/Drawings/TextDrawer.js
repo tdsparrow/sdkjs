@@ -2181,19 +2181,19 @@ CTextDrawer.prototype =
     {
         if(oTextPr)
         {
-            if(oTextPr.TextFill)
-            {
-                if(AscFormat.isRealNumber(oTextPr.TextFill.transparent) && oTextPr.TextFill.transparent < 254.5){
-                    var oRetFill = oTextPr.TextFill.createDuplicate();
-                    //oRetFill.transparent = 255.0 - oTextPr.TextFill.transparent;
-                    return oRetFill;
-                }
-                return oTextPr.TextFill;
-            }
             if(oTextPr.Unifill)
             {
                 return oTextPr.Unifill;
             }
+            // if(oTextPr.TextFill)
+            // {
+            //     if(AscFormat.isRealNumber(oTextPr.TextFill.transparent) && oTextPr.TextFill.transparent < 254.5){
+            //         var oRetFill = oTextPr.TextFill.createDuplicate();
+            //         //oRetFill.transparent = 255.0 - oTextPr.TextFill.transparent;
+            //         return oRetFill;
+            //     }
+            //     return oTextPr.TextFill;
+            // }
             if(oTextPr.Color)
             {
                 return AscFormat.CreateUnfilFromRGB(oTextPr.Color.r, oTextPr.Color.g, oTextPr.Color.b)
