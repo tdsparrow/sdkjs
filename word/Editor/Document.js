@@ -3272,7 +3272,11 @@ CDocument.prototype.private_Recalculate = function(_RecalcData, isForceStrictRec
 		if (ChangedElement.GetPagesCount() > 0 && -1 !== ChangedElement.GetIndex() && ChangedElement.Get_StartPage_Absolute() < RecalcData.Inline.PageNum - 1)
 		{
 			StartPage  = ChangedElement.GetStartPageForRecalculate(RecalcData.Inline.PageNum - 1);
-			StartIndex = this.Pages[StartPage].Pos;
+
+			if (!this.FullRecalc.Id || StartPage < this.FullRecalc.PageIndex)
+				StartIndex = this.Pages[StartPage].Pos;
+			else
+				StartIndex = this.FullRecalc.StartIndex;
 		}
 		else
 		{
@@ -16711,9 +16715,7 @@ CDocument.prototype.controller_AddToParagraph = function(ParaItem, bRecalculate)
 		}
 
 		this.UpdateSelection();
-
-		if (ParaItem.Type !== para_Text && ParaItem.Type !== para_Space)
-			this.UpdateInterface();
+		this.UpdateInterface();
 	}
 
 	// Специальная заглушка для функции TextBox_Put
@@ -19973,20 +19975,37 @@ CDocument.prototype.private_RemoveBookmark = function(sName)
 };
 CDocument.prototype.AddTableOfContents = function(sHeading, oPr, oSdt)
 {
-	if (false === this.Document_Is_SelectionLocked(AscCommon.changestype_Document_Content))
+	var oStyles     = this.GetStyles();
+	var nStylesType = oPr ? oPr.get_StylesType() : Asc.c_oAscTOCStylesType.Current;
+
+	var isNeedChangeStyles = (Asc.c_oAscTOCStylesType.Current !== nStylesType && nStylesType !== oStyles.GetTOCStylesType());
+
+	var isLocked = true;
+	if (isNeedChangeStyles)
+	{
+		isLocked = this.IsSelectionLocked(AscCommon.changestype_Document_Content, {
+			Type : AscCommon.changestype_2_AdditionalTypes, Types : [AscCommon.changestype_Document_Styles]
+		});
+	}
+	else
+	{
+		isLocked = this.IsSelectionLocked(AscCommon.changestype_Document_Content)
+	}
+
+	if (!isLocked)
 	{
 		this.StartAction(AscDFH.historydescription_Document_AddTableOfContents);
 
-        if(this.DrawingObjects.selectedObjects.length > 0)
-        {
-            var oContent = this.DrawingObjects.getTargetDocContent();
-            if(!oContent || oContent.bPresentation)
-            {
-                this.DrawingObjects.resetInternalSelection();
-            }
-        }
+		if (this.DrawingObjects.selectedObjects.length > 0)
+		{
+			var oContent = this.DrawingObjects.getTargetDocContent();
+			if (!oContent || oContent.bPresentation)
+			{
+				this.DrawingObjects.resetInternalSelection();
+			}
+		}
 
-        if (oSdt instanceof CBlockLevelSdt)
+		if (oSdt instanceof CBlockLevelSdt)
 		{
 			oSdt.ClearContentControl();
 		}
@@ -20018,6 +20037,9 @@ CDocument.prototype.AddTableOfContents = function(sHeading, oPr, oSdt)
 
 		if (oPr)
 		{
+			if (isNeedChangeStyles)
+				oStyles.SetTOCStylesType(nStylesType);
+
 			oComplexField.SetPr(oPr);
 			oComplexField.Update();
 		}

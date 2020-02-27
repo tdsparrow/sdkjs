@@ -1647,7 +1647,7 @@ background-repeat: no-repeat;\
 	{
 		var opt = {};
         if (options && options.advancedOptions && options.advancedOptions && (Asc.c_oAscPrintType.Selection === options.advancedOptions.asc_getPrintType()))
-            opt["selection"] = 1;
+			opt["printOptions"] = { "selection" : 1 };
 
 		window["AscDesktopEditor"]["Print"](JSON.stringify(opt));
 		return true;
@@ -5312,7 +5312,7 @@ background-repeat: no-repeat;\
 	};
 
 
-	asc_docs_api.prototype.asc_AddVideo = function(sImageUrlLocal, sVideoUrl)
+	asc_docs_api.prototype.asc_AddVideoCallback = function(sImageUrlLocal, sVideoUrl, obj)
 	{
 		var oApi = this;
 		var sImageUrl = AscCommon.g_oDocumentUrls.getImageUrl(sImageUrlLocal);
@@ -5327,10 +5327,10 @@ background-repeat: no-repeat;\
 			oImageObject.Image.width = _image.Image.width;
 			oImageObject.Image.height = _image.Image.height;
 			oImageObject.videoUrl = sVideoUrl;
-			oApi.WordControl.m_oLogicDocument.addImages([oImageObject]);
+			oApi.WordControl.m_oLogicDocument.addImages([oImageObject], obj);
 		});
 	};
-	asc_docs_api.prototype.asc_AddAudio = function(sImageUrlLocal, sAudioUrl)
+	asc_docs_api.prototype.asc_AddAudioCallback = function(sImageUrlLocal, sAudioUrl, obj)
 	{
 		var oApi = this;
         var sImageUrl = AscCommon.g_oDocumentUrls.getImageUrl(sImageUrlLocal);
@@ -5345,7 +5345,7 @@ background-repeat: no-repeat;\
 			oImageObject.Image.width = 50;
 			oImageObject.Image.height = 50;
 			oImageObject.audioUrl = sAudioUrl;
-			oApi.WordControl.m_oLogicDocument.addImages([oImageObject]);
+			oApi.WordControl.m_oLogicDocument.addImages([oImageObject], obj);
 		});
 	};
 
@@ -8054,9 +8054,6 @@ background-repeat: no-repeat;\
 	asc_docs_api.prototype["asc_getCurrentFocusObject"]           = asc_docs_api.prototype.asc_getCurrentFocusObject;
 	asc_docs_api.prototype["asc_AddMath"]           			  = asc_docs_api.prototype.asc_AddMath;
 	asc_docs_api.prototype["asc_SetMathProps"]           		  = asc_docs_api.prototype.asc_SetMathProps;
-
-	asc_docs_api.prototype["asc_AddVideo"]           		  = asc_docs_api.prototype.asc_AddVideo;
-	asc_docs_api.prototype["asc_AddAudio"]           		  = asc_docs_api.prototype.asc_AddAudio;
 
     asc_docs_api.prototype['sendEvent']								= asc_docs_api.prototype.sendEvent;
 

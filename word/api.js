@@ -903,12 +903,6 @@
 	{
 		return (null === this.WordControl.m_oLogicDocument);
 	};
-	asc_docs_api.prototype.LoadFontsFromServer = function(_fonts)
-	{
-		if (undefined === _fonts)
-			_fonts = ["Arial", "Symbol", "Wingdings", "Courier New", "Times New Roman"];
-		this.FontLoader.LoadFontsFromServer(_fonts);
-	};
 
 	asc_docs_api.prototype.SetCollaborativeMarksShowType = function(Type)
 	{
@@ -1989,11 +1983,13 @@ background-repeat: no-repeat;\
 		}
 		else
 		{
-            var opt = 0;
-            if (options && options.advancedOptions && options.advancedOptions && (Asc.c_oAscPrintType.Selection === options.advancedOptions.asc_getPrintType()))
-                opt |= 1;
+			var opt = {};
+			if (options && options.advancedOptions && options.advancedOptions && (Asc.c_oAscPrintType.Selection === options.advancedOptions.asc_getPrintType()))
+			{
+				opt["printOptions"] = { "selection" : 1 };
+			}
 
-			window["AscDesktopEditor"]["Print"](opt);
+			window["AscDesktopEditor"]["Print"](JSON.stringify(opt));
 			return true;
 		}
 		return true;
@@ -10167,7 +10163,6 @@ background-repeat: no-repeat;\
 	CAscFootnotePr.prototype['get_NumRestart']                          = CAscFootnotePr.prototype.get_NumRestart;
 	CAscFootnotePr.prototype['put_NumRestart']                          = CAscFootnotePr.prototype.put_NumRestart;
 	window['Asc']['asc_docs_api']                                       = asc_docs_api;
-	asc_docs_api.prototype['LoadFontsFromServer']                       = asc_docs_api.prototype.LoadFontsFromServer;
 	asc_docs_api.prototype['SetCollaborativeMarksShowType']             = asc_docs_api.prototype.SetCollaborativeMarksShowType;
 	asc_docs_api.prototype['GetCollaborativeMarksShowType']             = asc_docs_api.prototype.GetCollaborativeMarksShowType;
 	asc_docs_api.prototype['Clear_CollaborativeMarks']                  = asc_docs_api.prototype.Clear_CollaborativeMarks;
