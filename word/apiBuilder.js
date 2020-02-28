@@ -613,8 +613,6 @@
 		
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Bold : isBold}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.RangeTextPr.Bold = isBold;
 
@@ -646,8 +644,6 @@
 		
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Caps : isCaps}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.RangeTextPr.Caps = isCaps;
 
@@ -704,9 +700,6 @@
 			Api.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Unifill : Unifill}));
 		}
 
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
-		
 		this.RangeTextPr.Color = color;
 
 		editor.WordControl.m_oLogicDocument.RemoveSelection();
@@ -737,8 +730,6 @@
 			
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({DStrikeout : isDoubleStrikeout}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.RangeTextPr.DStrikeout = isDoubleStrikeout;
 
@@ -782,10 +773,6 @@
 			this.RangeTextPr.HighlightColor = color;
 		}
 			
-
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
-		
 		editor.WordControl.m_oLogicDocument.RemoveSelection();
 		
 		if (oldSelectionInfo.length !== 0)
@@ -848,8 +835,6 @@
 		}
 
 		this.RangeTextPr.Shd = Shd;
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		editor.WordControl.m_oLogicDocument.RemoveSelection();
 		
@@ -880,8 +865,6 @@
 		
 		this.SetSelection();
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Italic : isItalic}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 
 		this.Italic = isItalic;
 
@@ -918,9 +901,6 @@
 		Strikeout  : isStrikeout,
 		DStrikeout : false
 		}));
-
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.RangeTextPr.Caps = isCaps;
 
@@ -956,8 +936,6 @@
 			SmallCaps : isSmallCaps,
 			Caps      : false
 		}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.RangeTextPr.SmallCaps = isSmallCaps;
 
@@ -990,8 +968,6 @@
 		this.SetSelection(true);
 		
 		Api.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Spacing : nSpacing}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.RangeTextPr.Spacing = nSpacing;
 
@@ -1024,8 +1000,6 @@
 		
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Underline : isUnderline}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.Underline = isUnderline;
 
@@ -1068,8 +1042,6 @@
 		
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({VertAlign : value}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.VertAlign = value;
 
@@ -1104,8 +1076,6 @@
 				
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({Position : nPosition}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.Position = nPosition;
 
@@ -1139,9 +1109,6 @@
 
 		editor.SetLanguage(sLangId);
 
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
-		
 		editor.WordControl.m_oLogicDocument.RemoveSelection();
 		
 		if (oldSelectionInfo.length !== 0)
@@ -1170,8 +1137,6 @@
 				
 		this.SetSelection(true);
 		editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({FontSize : FontSize}));
-		editor.WordControl.m_oLogicDocument.Recalculate();
-		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
 		this.FontSize = FontSize;
 
@@ -1217,8 +1182,6 @@
 			
 			this.SetSelection(true);
 			editor.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({FontFamily : FontFamily}));
-			editor.WordControl.m_oLogicDocument.Recalculate();
-			editor.WordControl.m_oLogicDocument.UpdateInterface();
 			
 			this.FontFamily = FontFamily;
 
