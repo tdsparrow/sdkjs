@@ -899,7 +899,7 @@
 		
 		return this;
 	};
-	ApiRange.prototype.SetCaps = function(isCaps)
+	ApiRange.prototype.SetStrikeout = function(isStrikeout)
 	{
 		if (this.isEmpty || this.isEmpty === undefined)
 			return false;
@@ -914,10 +914,11 @@
 		
 		this.SetSelection(true);
 
-		Api.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({
-			Caps      : isCaps,
-			SmallCaps : false
+		this.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({
+		Strikeout  : isStrikeout,
+		DStrikeout : false
 		}));
+
 		editor.WordControl.m_oLogicDocument.Recalculate();
 		editor.WordControl.m_oLogicDocument.UpdateInterface();
 		
