@@ -3975,6 +3975,55 @@
 
 		return ParaEndInfo;
 	};
+	/**
+	 * Get the last no empty element of document. 
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @returns {?DocumentElement}
+	 */
+	ApiDocument.prototype.Last = function()
+	{
+		var LastNoEmptyPara = null;
+
+		for (var Index = this.GetElementsCount() - 1; Index >= 0; Index--)
+		{
+			LastNoEmptyPara = this.GetElement(Index);
+
+			for (var Run = 0; Run < LastNoEmptyPara.GetElementsCount(); Run++)
+			{
+				if (LastNoEmptyPara.GetElement(Run).Run.Content.length !== 0)
+					return LastNoEmptyPara;
+			}
+		}
+
+		return false;
+	};
+
+	/**
+	 * Push a paragraph or a table  or a text to actually add it to the document.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {DocumentElement} oElement - The type of the element which will be pushed to the document.
+	 * @returns {boolean} Returns <code>false</code> if the type of <code>oElement</code> is not supported by paragraph
+	 * content.
+	 */
+	ApiDocument.prototype.Push = function(oElement)
+	{
+		if (oElement instanceof ApiParagraph || oElement instanceof ApiTable)
+		{
+			this.Document.Internal_Content_Add(this.Document.Content.length, oElement.private_GetImpl());
+		}
+		else if (typeof oElement === "string")
+		{
+			this.Document.StartAction();
+
+			var oParagraph = editor.CreateParagraph();
+			oParagraph.AddText(oElement);
+			this.Document.Internal_Content_Add(this.Document.Content.length, oParagraph.private_GetImpl());
+
+			this.Document.FinalizeAction();
+		}
+		else 
+			return false;
+	};
 
 	//------------------------------------------------------------------------------------------------------------------
 	//
@@ -4371,7 +4420,754 @@
 	
 		return Range;
 	};
-	
+
+	/**
+	 * Add an element to the current paragraph.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {ParagraphContent} oElement - The document element which will be added at the current position. Returns false if the
+	 * type of oElement is not supported by a paragraph.
+	 * @returns {boolean} Returns <code>false</code> if the type of <code>oElement</code> is not supported by paragraph
+	 * content.
+	 */
+	ApiParagraph.prototype.Push = function(oElement)
+	{
+		if (oElement instanceof ApiRun)
+		{
+			this.AddElement(ApiRun);
+		}
+		else if (typeof oElement === "string")
+		{
+			var oRun = editor.CreateRun();
+			oRun.AddText(oElement);
+			this.AddElement(oRun);
+		}
+		else 
+			return false;
+	};
+	/**
+	 * Set the bold property to the text character.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isBold - Specifies that the contents of this run are displayed bold.
+	 */
+	ApiParagraph.prototype.SetBold = function(isBold)
+	{
+		
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetBold(isBold);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetBold(isBold);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+		
+		return this;
+	};
+	/**
+	 * Specify that any lowercase characters in this text run are formatted for display only as their capital letter character equivalents.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isCaps - Specifies that the contents of the current run are displayed capitalized.
+	 */
+	ApiParagraph.prototype.SetCaps = function(isCaps)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetCaps(isCaps);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetCaps(isCaps);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set the text color for the current text run in the RGB format.
+	 * @typeofeditors ["CDE"]
+	 * @param {byte} r - Red color component value.
+	 * @param {byte} g - Green color component value.
+	 * @param {byte} b - Blue color component value.
+	 * @param {boolean} [isAuto=false] - If this parameter is set to "true", then r,g,b parameters will be ignored.
+	 */
+	ApiParagraph.prototype.SetColor = function(r, g, b, isAuto)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetColor(r, g, b, isAuto);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetColor(r, g, b, isAuto);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify that the contents of this run is displayed with two horizontal lines through each character displayed on the line.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
+	 */
+	ApiParagraph.prototype.SetDoubleStrikeout = function(isDoubleStrikeout)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetDoubleStrikeout(isDoubleStrikeout);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetDoubleStrikeout(isDoubleStrikeout);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set the text color for the current text run.
+	 * @typeofeditors ["CSE", "CPE"]
+	 * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
+	 */
+	ApiParagraph.prototype.SetFill = function(oApiFill)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetFill(oApiFill);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetFill(oApiFill);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set all 4 font slots with the specified font family.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {string} sFontFamily - The font family or families used for the current text run.
+	 */
+	ApiParagraph.prototype.SetFontFamily = function(sFontFamily)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetFontFamily(sFontFamily);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetFontFamily(sFontFamily);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set the font size for the characters of the current text run.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {hps} nSize - The text size value measured in half-points (1/144 of an inch).
+	 */
+	ApiParagraph.prototype.SetFontSize = function(nSize)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetFontSize(nSize);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetFontSize(nSize);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify a highlighting color in the RGB format which is applied as a background for the contents of the current run.
+	 * @typeofeditors ["CDE"]
+	 * @param {byte} r - Red color component value.
+	 * @param {byte} g - Green color component value.
+	 * @param {byte} b - Blue color component value.
+	 * @param {boolean} [isNone=false] If this parameter is set to "true", then r,g,b parameters will be ignored.
+	 */
+	ApiParagraph.prototype.SetHighlight = function(r, g, b, isNone)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetHighlight(r, g, b, isNone);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetHighlight(r, g, b, isNone);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set the italic property to the text character.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isItalic - Specifies that the contents of the current run are displayed italicized.
+	 */
+	ApiParagraph.prototype.SetItalic = function(isItalic)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetItalic(isItalic);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetItalic(isItalic);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify the languages which will be used to check spelling and grammar (if requested) when processing
+	 * the contents of this text run.
+	 * @typeofeditors ["CDE"]
+	 * @param {string} sLangId - The possible value for this parameter is a language identifier as defined by
+	 * RFC 4646/BCP 47. Example: "en-CA".
+	 */
+	ApiParagraph.prototype.SetLanguage = function(sLangId)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetLanguage(sLangId);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetLanguage(sLangId);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify the amount by which text is raised or lowered for this run in relation to the default
+	 * baseline of the surrounding non-positioned text.
+	 * @typeofeditors ["CDE"]
+	 * @param {hps} nPosition - Specifies a positive (raised text) or negative (lowered text)
+	 * measurement in half-points (1/144 of an inch).
+	 */
+	ApiParagraph.prototype.SetPosition = function(nPosition)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetPosition(nPosition);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetPosition(nPosition);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify the shading applied to the contents of the current text run.
+	 * @typeofeditors ["CDE"]
+	 * @param {ShdType} sType - The shading type applied to the contents of the current text run.
+	 * @param {byte} r - Red color component value.
+	 * @param {byte} g - Green color component value.
+	 * @param {byte} b - Blue color component value.
+	 */
+	ApiParagraph.prototype.SetShd = function(sType, r, g, b)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetShd(sType, r, g, b);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetShd(sType, r, g, b);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify that all small letter characters in this text run are formatted for display only as their capital
+	 * letter character equivalents in a font size two points smaller than the actual font size specified for this text.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isSmallCaps - Specifies that the contents of the current run are displayed capitalized two points smaller.
+	 */
+	ApiParagraph.prototype.SetSmallCaps = function(isSmallCaps)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetSmallCaps(isSmallCaps);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetSmallCaps(isSmallCaps);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set text spacing measured in twentieths of a point.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {twips} nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
+	 */
+	ApiParagraph.prototype.SetSpacing = function(nSpacing)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetSpacing(nSpacing);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetSpacing(nSpacing);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify that the contents of this run are displayed with a single horizontal line through the center of the line.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isStrikeout - Specifies that the contents of the current run are displayed struck through.
+	 */
+	ApiParagraph.prototype.SetStrikeout = function(isStrikeout)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetStrikeout(isStrikeout);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetStrikeout(isStrikeout);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Set style for the current Paragraph.
+	 * @typeofeditors ["CDE"]
+	 * @param {ApiStyle} oStyle - The style which must be applied to the text character.
+	 */
+	ApiParagraph.prototype.SetStyle = function(oStyle)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetStyle(oStyle);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetStyle(oStyle);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify that the contents of this run are displayed along with a line appearing directly below the character
+	 * (less than all the spacing above and below the characters on the line).
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isUnderline - Specifies that the contents of the current run are displayed underlined.
+	 */
+	ApiParagraph.prototype.SetUnderline = function(isUnderline)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetUnderline(isUnderline);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetUnderline(isUnderline);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Specify the alignment which will be applied to the contents of this run in relation to the default appearance of the run text:
+	 * * <b>"baseline"</b> - the characters in the current text run will be aligned by the default text baseline.
+	 * * <b>"subscript"</b> - the characters in the current text run will be aligned below the default text baseline.
+	 * * <b>"superscript"</b> - the characters in the current text run will be aligned above the default text baseline.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {("baseline" | "subscript" | "superscript")} sType - The vertical alignment type applied to the text contents.
+	 */
+	ApiParagraph.prototype.SetVertAlign = function(sType)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+
+		for (var Index = 0; Index < this.Paragraph.GetContentLength(); Index++)
+		{
+			var TempElement = this.GetElement(Index);
+			
+			if (TempElement instanceof ApiRun)
+			{
+				var oTextPr = TempElement.GetTextPr();
+				oTextPr.SetVertAlign(sType);
+			}
+			else if (TempElement instanceof ApiParaHyperlink)
+			{
+				for (var RunInHyper = 0; RunInHyper < TempElement.ParaHyperlink.Content.length; RunInHyper++)
+				{
+					var TempRun = TempElement.GetElement(RunInHyper);
+					
+					if (TempRun instanceof ApiRun)
+					{
+						var oTextPr = TempRun.GetTextPr();
+						oTextPr.SetVertAlign(sType);
+					}
+				}
+			}
+		}
+		
+		Document.FinalizeAction();
+
+		return this;
+	};
+	/**
+	 * Get the last no empty element of the paragraph.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @returns {?ParagraphContent}
+	 */
+	ApiParagraph.prototype.Last = function()
+	{
+		var LastNoEmptyRun = null;
+
+		for (var Index = this.GetElementsCount() - 1; Index >= 0; Index--)
+		{
+			LastNoEmptyRun = this.GetElement(Index);
+
+			if (LastNoEmptyRun.Run.Content.length !== 0)
+			{
+				return LastNoEmptyRun;
+			}
+		}
+
+		return false;
+	};
 	//------------------------------------------------------------------------------------------------------------------
 	//
 	// ApiRun
@@ -4521,12 +5317,303 @@
 
 	/**
 	 * Get range of text by start and end position into element 
-	 */
+	 * @typeofeditors ["CDE"]
+	 * @param {Number} Start - start position into element
+	 * @param {Number} End - end position into element 
+	 */ 
 	ApiRun.prototype.GetRange = function(Start, End)
 	{
 		var Range = new ApiRange(this.Run, Start, End);
 
 		return Range;
+	};
+	/**
+	 * Set the bold property to the text character.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isBold - Specifies that the contents of this run are displayed bold.
+	 */
+	ApiRun.prototype.SetBold = function(isBold)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetBold(isBold);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify that any lowercase characters in this text run are formatted for display only as their capital letter character equivalents.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isCaps - Specifies that the contents of the current run are displayed capitalized.
+	 */
+	ApiRun.prototype.SetCaps = function(isCaps)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetCaps(isCaps);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set the text color for the current text run in the RGB format.
+	 * @typeofeditors ["CDE"]
+	 * @param {byte} r - Red color component value.
+	 * @param {byte} g - Green color component value.
+	 * @param {byte} b - Blue color component value.
+	 * @param {boolean} [isAuto=false] - If this parameter is set to "true", then r,g,b parameters will be ignored.
+	 */
+	ApiRun.prototype.SetColor = function(r, g, b, isAuto)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetColor(r, g, b, isAuto);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify that the contents of this run is displayed with two horizontal lines through each character displayed on the line.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
+	 */
+	ApiRun.prototype.SetDoubleStrikeout = function(isDoubleStrikeout)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetDoubleStrikeout(isDoubleStrikeout);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set the text color for the current text run.
+	 * @typeofeditors ["CSE", "CPE"]
+	 * @param {ApiFill} oApiFill - The color or pattern used to fill the text color.
+	 */
+	ApiRun.prototype.SetFill = function(oApiFill)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetFill(oApiFill);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set all 4 font slots with the specified font family.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {string} sFontFamily - The font family or families used for the current text run.
+	 */
+	ApiRun.prototype.SetFontFamily = function(SetFontFamily)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetFontFamily(SetFontFamily);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set the font size for the characters of the current text run.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {hps} nSize - The text size value measured in half-points (1/144 of an inch).
+	 */
+	ApiRun.prototype.SetFontSize = function(nSize)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetFontSize(nSize);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify a highlighting color in the RGB format which is applied as a background for the contents of the current run.
+	 * @typeofeditors ["CDE"]
+	 * @param {byte} r - Red color component value.
+	 * @param {byte} g - Green color component value.
+	 * @param {byte} b - Blue color component value.
+	 * @param {boolean} [isNone=false] If this parameter is set to "true", then r,g,b parameters will be ignored.
+	 */
+	ApiRun.prototype.SetHighlight = function(r, g, b, isNone)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetHighlight(r, g, b, isNone);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set the italic property to the text character.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isItalic - Specifies that the contents of the current run are displayed italicized.
+	 */
+	ApiRun.prototype.SetItalic = function(isItalic)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetItalic(isItalic);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify the languages which will be used to check spelling and grammar (if requested) when processing
+	 * the contents of this text run.
+	 * @typeofeditors ["CDE"]
+	 * @param {string} sLangId - The possible value for this parameter is a language identifier as defined by
+	 * RFC 4646/BCP 47. Example: "en-CA".
+	 */
+	ApiRun.prototype.SetLanguage = function(sLangId)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetLanguage(sLangId);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify the amount by which text is raised or lowered for this run in relation to the default
+	 * baseline of the surrounding non-positioned text.
+	 * @typeofeditors ["CDE"]
+	 * @param {hps} nPosition - Specifies a positive (raised text) or negative (lowered text)
+	 * measurement in half-points (1/144 of an inch).
+	 */
+	ApiRun.prototype.SetPosition = function(nPosition)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetPosition(nPosition);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify the shading applied to the contents of the current text run.
+	 * @typeofeditors ["CDE"]
+	 * @param {ShdType} sType - The shading type applied to the contents of the current text run.
+	 * @param {byte} r - Red color component value.
+	 * @param {byte} g - Green color component value.
+	 * @param {byte} b - Blue color component value.
+	 */
+	ApiRun.prototype.SetShd = function(sType, r, g, b)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetShd(sType, r, g, b);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify that all small letter characters in this text run are formatted for display only as their capital
+	 * letter character equivalents in a font size two points smaller than the actual font size specified for this text.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isSmallCaps - Specifies that the contents of the current run are displayed capitalized two points smaller.
+	 */
+	ApiRun.prototype.SetSmallCaps = function(isSmallCaps)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetSmallCaps(isSmallCaps);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set text spacing measured in twentieths of a point.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {twips} nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
+	 */
+	ApiRun.prototype.SetSpacing = function(SetSpacing)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetSpacing(SetSpacing);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify that the contents of this run are displayed with a single horizontal line through the center of the line.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isStrikeout - Specifies that the contents of the current run are displayed struck through.
+	 */
+	ApiRun.prototype.SetStrikeout = function(isStrikeout)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetStrikeout(isStrikeout);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Set style for the current Run.
+	 * @typeofeditors ["CDE"]
+	 * @param {ApiStyle} oStyle - The style which must be applied to the text character.
+	 */
+	ApiRun.prototype.SetStyle = function(oStyle)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetStyle(oStyle);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify that the contents of this run are displayed along with a line appearing directly below the character
+	 * (less than all the spacing above and below the characters on the line).
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {boolean} isUnderline - Specifies that the contents of the current run are displayed underlined.
+	 */
+	ApiRun.prototype.SetUnderline = function(isUnderline)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetUnderline(isUnderline);
+		
+		Document.FinalizeAction();
+		return oTextPr;
+	};
+	/**
+	 * Specify the alignment which will be applied to the contents of this run in relation to the default appearance of the run text:
+	 * * <b>"baseline"</b> - the characters in the current text run will be aligned by the default text baseline.
+	 * * <b>"subscript"</b> - the characters in the current text run will be aligned below the default text baseline.
+	 * * <b>"superscript"</b> - the characters in the current text run will be aligned above the default text baseline.
+	 * @typeofeditors ["CDE", "CSE", "CPE"]
+	 * @param {("baseline" | "subscript" | "superscript")} sType - The vertical alignment type applied to the text contents.
+	 */
+	ApiRun.prototype.SetVertAlign = function(sType)
+	{
+		var Document = private_GetLogicDocument();
+		Document.StartAction();
+		var oTextPr = this.GetTextPr();
+		oTextPr.SetVertAlign(sType);
+		
+		Document.FinalizeAction();
+		return oTextPr;
 	};
 
 	//------------------------------------------------------------------------------------------------------------------
