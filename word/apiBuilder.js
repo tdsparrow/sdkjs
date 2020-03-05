@@ -69,7 +69,7 @@
 		this.isEmpty 			  = true;
 		this.paragraphs 		  = [];
 		this.Text 				  = undefined;
-
+		this.oLogicDocument		  = editor.GetDocument();
 		this.RangeTextPr = {
 			Bold : undefined,
 			Caps : undefined,
@@ -88,8 +88,8 @@
 		}
 
 		this.private_SetStartAndEnd(this.Element, Start, End);
-		this.StartPos = editor.GetDocument().SetStartPos(oElement, this.Start);
-		this.EndPos   = editor.GetDocument().SetEndPos(oElement, this.End);
+		this.StartPos = this.oLogicDocument.SetStartPos(oElement, this.Start);
+		this.EndPos   = this.oLogicDocument.SetEndPos(oElement, this.End);
 
 		if (this.StartPos.length === 0 || this.EndPos.length === 0)
 			return false;
@@ -480,7 +480,7 @@
 		
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 
 		this.SetSelection(true);
@@ -612,11 +612,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -634,8 +632,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetCaps = function(isCaps)
@@ -646,17 +642,14 @@
 		var Api = editor;
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
-		
-		Document.StartAction();
 
 		var oldSelectionInfo = [];
-		
-		if (Document.IsSelectionUse)
+
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
-		
+
 		this.SetSelection(true);
 		Document.AddToParagraph(new AscCommonWord.ParaTextPr({Caps : isCaps}));
-		
 		this.RangeTextPr.Caps = isCaps;
 
 		Document.RemoveSelection();
@@ -669,8 +662,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetColor = function(r, g, b, isAuto)
@@ -688,11 +679,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -728,8 +717,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetDoubleStrikeout = function(isDoubleStrikeout)
@@ -741,11 +728,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 			
 		this.SetSelection(true);
@@ -763,8 +748,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetHighlight = function(r, g, b, isNone)
@@ -775,12 +758,10 @@
 		var Api = editor;
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
-		
-		Document.StartAction();
 
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -807,8 +788,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetShd = function(sType, r, g, b)
@@ -826,11 +805,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 			
 		this.SetSelection(true);
@@ -874,8 +851,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetItalic = function(isItalic)
@@ -887,11 +862,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection();
@@ -909,8 +882,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-		
 		return this;
 	};
 	ApiRange.prototype.SetStrikeout = function(isStrikeout)
@@ -922,16 +893,14 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
 
-		this.WordControl.m_oLogicDocument.AddToParagraph(new AscCommonWord.ParaTextPr({
+		Document.AddToParagraph(new AscCommonWord.ParaTextPr({
 		Strikeout  : isStrikeout,
 		DStrikeout : false
 		}));
@@ -948,8 +917,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetSmallCaps = function(isSmallCaps)
@@ -961,11 +928,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -986,8 +951,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetSpacing = function(nSpacing)
@@ -999,11 +962,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -1022,8 +983,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetUnderline = function(isUnderline)
@@ -1034,12 +993,10 @@
 		var Api = editor;
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
-		
-		Document.StartAction();
 
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 
 		this.SetSelection(true);
@@ -1056,8 +1013,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetVertAlign = function(sType)
@@ -1080,11 +1035,9 @@
 		else 
 			return false;
 
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -1102,8 +1055,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetPosition = function(nPosition)
@@ -1118,11 +1069,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1140,42 +1089,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
-		return this;
-	};
-	ApiRange.prototype.SetLanguage = function(sLangId)
-	{
-		if (this.isEmpty || this.isEmpty === undefined)
-			return false;
-
-		var Api = editor;
-		var ApiDocument = Api.GetDocument();
-		var Document = private_GetLogicDocument();
-		
-		Document.StartAction();
-
-		var oldSelectionInfo = [];
-		
-		if (Document.IsSelectionUse)
-			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
-				
-		this.SetSelection(true);
-
-		editor.SetLanguage(sLangId);
-
-		Document.RemoveSelection();
-		
-		if (oldSelectionInfo.length !== 0)
-		{
-			ApiDocument.ReturnOldSelection(oldSelectionInfo);
-		}
-
-		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
-		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
-
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetFontSize = function(FontSize)
@@ -1187,11 +1100,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction();
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1209,8 +1120,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.SetFontFamily = function(FontFamily)
@@ -1231,8 +1140,6 @@
 
 		if (isasync === false)
 		{
-			Document.StartAction();
-
 			var FontFamily = {
 				Name : FontFamily,
 				Index : -1
@@ -1240,7 +1147,7 @@
 
 			var oldSelectionInfo = [];
 		
-			if (Document.IsSelectionUse)
+			if (Document.IsSelectionUse())
 				oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 			
 			this.SetSelection(true);
@@ -1258,8 +1165,6 @@
 			this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 			this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-			Document.FinalizeAction();
-		
 			return this;
 		}
 		
@@ -1276,11 +1181,9 @@
 		var ApiDocument = Api.GetDocument();
 		var Document = private_GetLogicDocument();
 		
-		Document.StartAction(AscDFH.historydescription_Document_SetParagraphStyle);
-
 		var oldSelectionInfo = [];
 		
-		if (Document.IsSelectionUse)
+		if (Document.IsSelectionUse())
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1301,8 +1204,6 @@
 		this.StartPos = ApiDocument.SetStartPos(this.Element, this.Start);
 		this.EndPos   = ApiDocument.SetEndPos(this.Element, this.End);
 
-		Document.FinalizeAction();
-	
 		return this;
 	};
 	ApiRange.prototype.Delete = function()
@@ -1310,17 +1211,12 @@
 		if (this.isEmpty || this.isEmpty === undefined)
 			return false;
 
-		Document.StartAction();
-
 		this.SetSelection();
 		Document.Remove(-1, true, false, false, false);
 		Document.RemoveSelection();
 
-		Document.FinalizeAction();
 		return this;
 	};
-	
-	
 	/**
 	 * Class representing a document.
 	 * @constructor
@@ -2932,7 +2828,7 @@
 		}
 		oSelectedContent.On_EndCollectElements(this.Document, true);
 
-		if (this.Document.IsSelectionUse())
+		if (this.Document.IsSelectionUse()())
 		{
 			this.Document.Start_SilentMode();
 			this.Document.Remove(1, false, false, false);
