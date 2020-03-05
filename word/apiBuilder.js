@@ -480,7 +480,7 @@
 		
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 
 		this.SetSelection(true);
@@ -616,7 +616,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -651,7 +651,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -692,7 +692,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -745,7 +745,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 			
 		this.SetSelection(true);
@@ -780,7 +780,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -830,7 +830,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 			
 		this.SetSelection(true);
@@ -891,7 +891,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection();
@@ -926,7 +926,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -965,7 +965,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1003,7 +1003,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -1039,7 +1039,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 
 		this.SetSelection(true);
@@ -1084,7 +1084,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 		
 		this.SetSelection(true);
@@ -1122,7 +1122,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1157,7 +1157,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1191,7 +1191,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
@@ -1240,7 +1240,7 @@
 
 			var oldSelectionInfo = [];
 		
-			if (ApiDocument.IsSelectionUse)
+			if (Document.IsSelectionUse)
 				oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 			
 			this.SetSelection(true);
@@ -1280,7 +1280,7 @@
 
 		var oldSelectionInfo = [];
 		
-		if (ApiDocument.IsSelectionUse)
+		if (Document.IsSelectionUse)
 			oldSelectionInfo = ApiDocument.SaveSelectionInfo();
 				
 		this.SetSelection(true);
