@@ -749,7 +749,8 @@ CParaSpellChecker.prototype.private_IsAbbreviation = function(sWord)
 				|| (0x1100 <= nCharCode && nCharCode <= 0x11FF)
 				|| (0x3130 <= nCharCode && nCharCode <= 0x318F)
 				|| (0xA960 <= nCharCode && nCharCode <= 0xA97F)
-				|| (0xD7B0 <= nCharCode && nCharCode <= 0xD7FF))
+				|| (0xD7B0 <= nCharCode && nCharCode <= 0xD7FF)
+				|| (0x4E00 <= nCharCode && nCharCode <= 0x9FFF))
 				return false;
 		}
 
